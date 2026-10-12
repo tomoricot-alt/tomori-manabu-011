@@ -1,0 +1,38 @@
+{
+  "name": "tomori-manabu-011",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "TOMORI MANABU - 宿題を、ひとりじゃなく、一緒に。",
+  "scripts": {
+    "dev": "vite",
+    "prepare:ocr": "node scripts/prepare-ocr-assets.mjs",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "build:web": "npm run prepare:ocr && vite build",
+    "build": "npm run build:web",
+    "preview": "vite preview",
+    "validate:app-info": "node scripts/validate-app-info.mjs app-info.json tomori-manabu-011",
+    "predev": "npm run prepare:ocr"
+  },
+  "dependencies": {
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "tesseract.js": "7.0.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.64.0",
+    "@tesseract.js-data/eng": "1.0.0",
+    "@testing-library/react": "16.3.3",
+    "@testing-library/user-event": "14.6.7",
+    "@types/node": "26.6.5",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "6.1.2",
+    "jsdom": "29.1.1",
+    "typescript": "7.0.2",
+    "vite": "8.3.4",
+    "vitest": "5.0.3"
+  }
+}
