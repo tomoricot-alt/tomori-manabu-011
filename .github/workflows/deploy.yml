@@ -1,0 +1,49 @@
+name: CI / Deploy to GitHub Pages
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: 一覧サイト用の app-info.json を検証
+        run: npm run validate:app-info
+      - name: 型チェック
+        run: npm run typecheck
+      - name: テスト
+        run: npm test
+      - name: Webビルド (OCR用ファイルのコピーを含む)
+        run: npm run build:web
+      - name: SPA用404を用意
+        run: cp dist/index.html dist/404.html
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    # mainへのマージ時のみ公開 (PRでは公開しない)
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
