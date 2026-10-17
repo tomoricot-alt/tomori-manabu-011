@@ -87,6 +87,23 @@ export function ReviewList({ items, onChange }: Props) {
                 onChange={(e) => update(it.key, { right: e.target.value.replace(/\D/g, '') })}
               />
             </div>
+            <div className="op-pills" role="group" aria-label={`${idx + 1}ばんめ しるしを ワンタップで えらぶ`}>
+              {OPS.map((o) => {
+                const active = it.op === o.value;
+                return (
+                  <button
+                    key={o.value}
+                    type="button"
+                    className={`op-pill ${active ? 'active' : ''}`}
+                    aria-pressed={active}
+                    aria-label={`${idx + 1}ばんめを ${o.name}（${o.label}）にする`}
+                    onClick={() => update(it.key, { op: o.value })}
+                  >
+                    {o.label}
+                  </button>
+                );
+              })}
+            </div>
             {r.ok ? (
               <p className="soft">✓ つかえます</p>
             ) : (

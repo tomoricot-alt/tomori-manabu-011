@@ -85,6 +85,14 @@ button:disabled { opacity: 0.55; cursor: not-allowed; }
 select.field { appearance: none; -webkit-appearance: none; text-align-last: center; padding: 6px 0; font-size: 26px; }
 .item { display: flex; flex-direction: column; gap: 8px; }
 .item .eq { display: grid; grid-template-columns: 1fr 72px 1fr; gap: 6px; }
+.op-pills { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.op-pill {
+  min-height: 48px; padding: 6px 8px; font-size: 22px; font-weight: 800;
+  border-radius: 14px; border: 2px solid var(--line); background: var(--ivory); color: var(--ink);
+}
+.op-pill.active {
+  background: var(--mint); border-color: var(--mint-dark); color: #0f3d2e;
+}
 .check { display: flex; align-items: center; gap: 10px; font-weight: 700; min-height: 44px; }
 .check input { width: 28px; height: 28px; accent-color: var(--mint-dark); }
 .err { color: var(--danger); font-weight: 700; font-size: 16px; }
