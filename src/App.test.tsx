@@ -252,6 +252,26 @@ describe('撮影とOCR', () => {
     expect(screen.getByTestId('problem').textContent).toBe('12 + 8 = ?');
   });
 
+  it('OCRで「÷」が「＋」に誤認識されたとき、確認画面のワンタップ演算子ボタンで「÷」に切り替えられる', async () => {
+    const prepare = vi.fn(async () => fakeImage());
+    const ocr = vi.fn(async () => ({ text: '(1) 24 + 4 =', confidence: 85 }));
+    const { user } = await setup({ prepare, ocr });
+    await pickFile(user);
+    await user.click(await screen.findByRole('button', { name: /もんだいを よみとる/ }));
+    await screen.findByText('もんだいの かくにん');
+
+    const divBtn = screen.getByRole('button', { name: '1ばんめを わり算（÷）にする' });
+    expect(divBtn.getAttribute('aria-pressed')).toBe('false');
+    await user.click(divBtn);
+    expect(divBtn.getAttribute('aria-pressed')).toBe('true');
+
+    // ワンタップ切替で「確認した」が有効になり、そのまま24 ÷ 4として開始できる
+    const start = btn(/いっしょに はじめる/) as HTMLButtonElement;
+    expect(start.disabled).toBe(false);
+    await user.click(start);
+    expect(screen.getByTestId('problem').textContent).toBe('24 ÷ 4 = ?');
+  });
+
   it('OCRが失敗しても止まらず、手入力で学習を始められる', async () => {
     const prepare = vi.fn(async () => fakeImage());
     const ocr = vi.fn(async () => {
